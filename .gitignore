@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+
+train/
+test/
+provenance.json
+completed.json
+runner.log
+
+*.pth
+*.pt

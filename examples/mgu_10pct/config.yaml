@@ -1,0 +1,87 @@
+seed: 0
+device: 0
+
+runtime:
+  threads: 2
+  minimum_free_memory_mib: 4200
+
+data:
+  root: /path/to/mgu
+  train_split: train
+  eval_split: eval
+  test_split: test
+  image_dir: img
+  mask_dir: mask
+  extension: .bmp
+  image_size: 512
+  num_workers: 1
+  labeled_fraction: 0.1
+  expected_counts: [14, 134, 48, 48]
+  split_manifest: split.json
+  external_unlabeled_dir: null
+  mask_values: [0, 26, 51, 77, 102, 128, 153, 179, 204, 230, 255]
+  class_names: [BG, RNFL, GCL, IPL, INL, OPL, ONL, IS/OS, RPE, Choroid, Optic Disc]
+  ignore_value: null
+  ignore_index: -100
+  mask_padding_value: 0
+
+augmentation:
+  weak_noise_std: 0.006
+  gamma_range: [0.75, 1.30]
+  contrast_range: [0.75, 1.25]
+  strong_noise_range: [0.0, 0.035]
+  blur_probability: 0.35
+  blur_kernel: 3
+
+model:
+  input_channels: 1
+  channels: [16, 32, 64, 128]
+  norm_groups: 8
+  num_classes: 11
+  feature_level: 2
+
+cmsir:
+  discriminator_hidden: 32
+  grl_scale: 1.0
+  layer_ids: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+training:
+  epochs: 120
+  steps_per_epoch: 32
+  batch_size: 1
+  learning_rate: 0.0005
+  minimum_lr_ratio: 0.02
+  warmup_epochs: 5
+  weight_decay: 0.0001
+  gradient_clip_norm: 5.0
+  ema_decay: 0.99
+  pseudo_threshold: 0.65
+  rampup_epochs: 15
+  rampup_coefficient: 5.0
+  early_stopping_patience: 30
+  amp: true
+
+crossover:
+  width_ratio: 0.3333333333333333
+
+loss_weights:
+  mix: 1.0
+  source: 0.05
+  prototype: 0.10
+
+evaluation:
+  batch_size: 1
+  visualization_count: 10
+  palette: [[0, 0, 0], [230, 25, 75], [60, 180, 75], [255, 225, 25], [0, 130, 200], [245, 130, 48], [145, 30, 180], [70, 240, 240], [240, 50, 230], [210, 245, 60], [250, 190, 190]]
+  ignore_color: [128, 128, 128]
+
+axial_alignment:
+  enabled: true
+  boundary_half_width: 16
+  smoothing_sigma: 3.0
+  background_sigma: 40.0
+  max_shift_fraction: 0.25
+  minimum_energy: 0.000001
+  minimum_correlation: 0.20
+  minimum_improvement: 0.02
+  image_fill: 0.0
